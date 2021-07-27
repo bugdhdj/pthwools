@@ -1,8 +1,10 @@
 <?php
 if (!extension_loaded("pthreads")) {
 
-    class Worker extends Thread {
-        public function collect(Closure $collector = null) {
+    class Worker extends Thread
+    {
+        public function collect(Closure $collector = null)
+        {
             foreach ($this->gc as $idx => $collectable) {
                 if ($collector) {
                     if ($collector($collectable)) {
@@ -17,25 +19,49 @@ if (!extension_loaded("pthreads")) {
 
             return count($this->gc) + count($this->stack);
         }
-        public function collector(Collectable $collectable) { return $collectable->isGarbage(); }
-        public function shutdown() { return $this->join(); }
-        public function isShutdown() { return $this->isJoined(); }
-        public function getStacked() { return count($this->stack); }
-        public function unstack() { return array_shift($this->stack); }
-        public function stack(Threaded $collectable) {
+
+        public function collector(Collectable $collectable)
+        {
+            return $collectable->isGarbage();
+        }
+
+        public function shutdown()
+        {
+            return $this->join();
+        }
+
+        public function isShutdown()
+        {
+            return $this->isJoined();
+        }
+
+        public function getStacked()
+        {
+            return count($this->stack);
+        }
+
+        public function unstack()
+        {
+            return array_shift($this->stack);
+        }
+
+        public function stack(Threaded $collectable)
+        {
             $this->stack[] = $collectable;
             if ($this->isStarted()) {
-                $this->runCollectable(count($this->stack)-1, $collectable);
+                $this->runCollectable(count($this->stack) - 1, $collectable);
             }
         }
 
-        public function run() {
+        public function run()
+        {
             foreach ($this->stack as $idx => $collectable) {
                 $this->runCollectable($idx, $collectable);
             }
         }
 
-        private function runCollectable($idx, Collectable $collectable) {
+        private function runCollectable($idx, Collectable $collectable)
+        {
             $collectable->worker = $this;
             $collectable->state |= THREAD::RUNNING;
             $collectable->run();

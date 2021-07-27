@@ -1,15 +1,18 @@
 <?php
 if (!extension_loaded("pthreads")) {
 
-    class Pool {
+    class Pool
+    {
 
-        public function __construct($size, $class = \Worker::class, $ctor = []) {
+        public function __construct($size, $class = \Worker::class, $ctor = [])
+        {
             $this->size = $size;
             $this->clazz = $class;
             $this->ctor = $ctor;
         }
 
-        public function submit(Threaded $collectable) {
+        public function submit(Threaded $collectable)
+        {
             if ($this->last > $this->size) {
                 $this->last = 0;
             }
@@ -23,31 +26,35 @@ if (!extension_loaded("pthreads")) {
             $this->workers[$this->last++]->stack($collectable);
         }
 
-        public function submitTo($worker, Threaded $collectable) {
+        public function submitTo($worker, Threaded $collectable)
+        {
             if (isset($this->workers[$worker])) {
                 $this->workers[$worker]->stack($collectable);
             }
         }
 
-        public function collect(Closure $collector = null) {
+        public function collect(Closure $collector = null)
+        {
             $total = 0;
             foreach ($this->workers as $worker)
                 $total += $worker->collect($collector);
             return $total;
         }
 
-        public function resize($size) {
+        public function resize($size)
+        {
             if ($size < $this->size) {
                 while ($this->size > $size) {
-                    if (isset($this->workers[$this->size-1]))
-                        $this->workers[$this->size-1]->shutdown();
-                    unset($this->workers[$this->size-1]);
+                    if (isset($this->workers[$this->size - 1]))
+                        $this->workers[$this->size - 1]->shutdown();
+                    unset($this->workers[$this->size - 1]);
                     $this->size--;
                 }
             }
         }
 
-        public function shutdown() {
+        public function shutdown()
+        {
             $this->workers = null;
         }
 

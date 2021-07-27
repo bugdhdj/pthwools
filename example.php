@@ -12,17 +12,19 @@ $pool = new Pool(4);
 $pool->submit(new class extends Threaded implements Collectable {
     private $garbage = false;
 
-    public function run() {
+    public function run()
+    {
         echo "Hello World\n";
         $this->garbage = true;
     }
 
-    public function isGarbage(): bool {
+    public function isGarbage(): bool
+    {
         return $this->garbage;
     }
 });
 
-while ($pool->collect(function($task){
+while ($pool->collect(function ($task) {
     return $task->isGarbage();
 })) continue;
 
