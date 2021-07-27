@@ -1,5 +1,5 @@
 {
-    "name": "krakjoe/pthreads-polyfill",
+    "name": "bugdhdj/pthwools",
     "type": "library",
     "description": "A polyfill for pthreads",
     "keywords": ["pthreads", "polyfill"],
