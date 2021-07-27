@@ -2,18 +2,22 @@
   "name": "bugdhdj/pthwools",
   "type": "library",
   "description": "A polyfill for pthreads",
-  "keywords": ["pthreads", "polyfill","swoole"],
+  "keywords": ["pthreads", "polyfill","swoole","pthwools"],
   "homepage": "http://pthreads.org/",
   "license": "GPL-3.0-or-later",
   "authors": [
     {
       "name": "Joe Watkins",
       "email": "krakjoe@php.net"
+    },
+    {
+      "name": "William Wang",
+      "email": "not@dhdj.org"
     }
   ],
   "autoload": {
     "psr-4": {
-      "": ["src"]
+      "": "src"
     }
   },
   "require-dev": {
