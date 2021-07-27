@@ -22,7 +22,8 @@
 			"src/Volatile.php",
 			"src/Thread.php",
 			"src/Worker.php",
-			"src/Pool.php"
+			"src/Pool.php",
+            "src/Constant.php"
 		]
     },
     "minimum-stability": "dev",
