@@ -10,20 +10,20 @@ require_once("vendor/autoload.php");
 */
 $pool = new Pool(4);
 $pool->submit(new class extends Threaded implements Collectable {
-	private $garbage = false;
-	
-	public function run() {
-		echo "Hello World\n";
-		$this->garbage = true;
-	}
-	
-	public function isGarbage(): bool {
-		return $this->garbage;
-	}
+    private $garbage = false;
+
+    public function run() {
+        echo "Hello World\n";
+        $this->garbage = true;
+    }
+
+    public function isGarbage(): bool {
+        return $this->garbage;
+    }
 });
 
 while ($pool->collect(function($task){
-	return $task->isGarbage();
+    return $task->isGarbage();
 })) continue;
 
 $pool->shutdown();
