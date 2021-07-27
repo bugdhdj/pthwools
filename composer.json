@@ -1,34 +1,27 @@
 {
-    "name": "bugdhdj/pthwools",
-    "type": "library",
-    "description": "A polyfill for pthreads",
-    "keywords": ["pthreads", "polyfill","swoole","pthwools"],
-    "homepage": "http://pthwools.org/",
-    "license": "GPL-3.0-or-later",
-    "authors": [
-        {
-            "name": "Joe Watkins",
-            "email": "krakjoe@php.net"
-        },
-        {
-          "name": "William Wang",
-          "email": "not@dhdj.org"
-        }
-    ],
-    "autoload": {
-        "files": [
-			"src/Collectable.php",
-			"src/Threaded.php",
-			"src/Volatile.php",
-			"src/Thread.php",
-			"src/Worker.php",
-			"src/Pool.php",
-            "src/Constant.php"
-		]
+  "name": "bugdhdj/pthwools",
+  "type": "library",
+  "description": "A polyfill for pthreads",
+  "keywords": ["pthreads", "polyfill","swoole","pthwools"],
+  "homepage": "http://pthreads.org/",
+  "license": "GPL-3.0-or-later",
+  "authors": [
+    {
+      "name": "Joe Watkins",
+      "email": "krakjoe@php.net"
     },
-    "minimum-stability": "dev",
-    "require-dev": {
-        "phpunit/phpunit": "^5"
+    {
+      "name": "William Wang",
+      "email": "not@dhdj.org"
     }
+  ],
+  "autoload": {
+    "psr-4": {
+      "": "src"
+    }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^5"
+  }
 }
 
