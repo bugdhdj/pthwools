@@ -8,17 +8,9 @@ if (!extension_loaded("pthreads")) {
 
         public function extend(string $class): bool;
 
-        public function from(Closure $run, Closure $construct, array $args): Threaded;
-
-        public function getTerminationInfo(): array;
-
         public function isRunning(): bool;
 
         public function isTerminated(): bool;
-
-        public function isWaiting(): bool;
-
-        public function lock(): bool;
 
         public function merge(mixed $from, bool $overwrite = true): bool;
 
@@ -33,8 +25,6 @@ if (!extension_loaded("pthreads")) {
         public function shift(): mixed;
 
         public function synchronized(Closure $block, mixed ...$args): mixed;
-
-        public function unlock(): bool;
 
         public function wait(int $timeout): bool;
     }

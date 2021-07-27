@@ -132,40 +132,20 @@ if (!extension_loaded("pthreads")) {
         {
             return count($this->data);
         }
-
+        // Cannot be implemented with native php code
         public function extend(string $class): bool
         {
-            // TODO: Implement extend() method.
-        }
-
-        public function from(Closure $run, Closure $construct, array $args): Threaded
-        {
-            // TODO: Implement from() method.
-        }
-
-        public function getTerminationInfo(): array
-        {
-            // TODO: Implement getTerminationInfo() method.
+            return true;
         }
 
         public function isRunning(): bool
         {
-            // TODO: Implement isRunning() method.
+            return $this->state & THREAD::RUNNING;
         }
 
         public function isTerminated(): bool
         {
-            // TODO: Implement isTerminated() method.
-        }
-
-        public function isWaiting(): bool
-        {
-            // TODO: Implement isWaiting() method.
-        }
-
-        public function lock(): bool
-        {
-            // TODO: Implement lock() method.
+            return $this->state & THREAD::ERROR;
         }
 
         public function merge(mixed $from, bool $overwrite = true): bool
@@ -189,7 +169,7 @@ if (!extension_loaded("pthreads")) {
 
         public function pop(): bool
         {
-            // TODO: Implement pop() method.
+            return array_pop($this->data);
         }
 
         public function run(): void
@@ -199,7 +179,7 @@ if (!extension_loaded("pthreads")) {
 
         public function shift(): mixed
         {
-            // TODO: Implement shift() method.
+            return array_shift($this->data);
         }
 
         public function synchronized(Closure $block, ...$args): mixed
@@ -207,14 +187,9 @@ if (!extension_loaded("pthreads")) {
             // TODO: Implement synchronized() method.
         }
 
-        public function unlock(): bool
-        {
-            // TODO: Implement unlock() method.
-        }
-
         public function wait(int $timeout): bool
         {
-            // TODO: Implement wait() method.
+            return true;
         }
     }
 }
