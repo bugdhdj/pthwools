@@ -1,42 +1,62 @@
 <?php
 if (!extension_loaded("pthreads")) {
 
-	class Thread extends Threaded {
-		public function isStarted() { return (bool) ($this->state & THREAD::STARTED); }
-		public function isJoined() { return (bool) ($this->state & THREAD::JOINED); }
-		public function kill() { 
-			$this->state |= THREAD::ERROR;
-			return true;  
-		}
+    class Thread extends Threaded implements Countable, IteratorAggregate, ArrayAccess, ThreadInterface
+    {
 
-		public static function 	getCurrentThreadId() 	{ return 1; }
-		public function 			getThreadId() 			{ return 1; }
+        public function detach(): void
+        {
+            // TODO: Implement detach() method.
+        }
 
-		public function start() {
-			if ($this->state & THREAD::STARTED) {
-				throw new \RuntimeException();
-			}
+        public function getCreatorId(): int
+        {
+            // TODO: Implement getCreatorId() method.
+        }
 
-			$this->state |= THREAD::STARTED;		
-			$this->state |= THREAD::RUNNING;
+        public static function getCurrentThread(): Thread
+        {
+            // TODO: Implement getCurrentThread() method.
+        }
 
-			try {
-				$this->run();
-			} catch(Exception $t) {
-				$this->state |= THREAD::ERROR;
-			}
+        public static function getCurrentThreadId(): int
+        {
+            // TODO: Implement getCurrentThreadId() method.
+        }
 
-			$this->state &= ~THREAD::RUNNING;
-			return true;
-		}
+        public function getThreadId(): int
+        {
+            // TODO: Implement getThreadId() method.
+        }
 
-		public function join() {
-			if ($this->state & THREAD::JOINED) {
-				throw new \RuntimeException();
-			}
+        public static function globally(): mixed
+        {
+            // TODO: Implement globally() method.
+        }
 
-			$this->state |= THREAD::JOINED;
-			return true;
-		}
-	}
+        public function isJoined(): bool
+        {
+            // TODO: Implement isJoined() method.
+        }
+
+        public function isStarted(): bool
+        {
+            // TODO: Implement isStarted() method.
+        }
+
+        public function join(): bool
+        {
+            // TODO: Implement join() method.
+        }
+
+        public function kill(): void
+        {
+            // TODO: Implement kill() method.
+        }
+
+        public function start(int $options = PTHREADS_INHERIT_ALL): bool
+        {
+            // TODO: Implement start() method.
+        }
+    }
 }
