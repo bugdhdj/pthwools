@@ -1,9 +1,17 @@
 <?php
 if (!extension_loaded("pthreads")) {
-	
+    /** TO BE IMPLEMENTED:
+     * Collectable - DONE
+	 * IteratorAggregate
+	 * Countable
+     * ArrayAccess
+     * ThreadedInterface
+	 */
 	class Threaded implements Collectable, IteratorAggregate, Countable, ArrayAccess, ThreadedInterface {
 
-        public function isGarbage()
+	    protected bool $_GARBAGE;
+
+        public function isGarbage():bool
         {
             // TODO: Implement isGarbage() method.
         }

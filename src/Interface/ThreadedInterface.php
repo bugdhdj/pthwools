@@ -1,7 +1,7 @@
 <?php
 if (!extension_loaded("pthreads")) {
     interface ThreadedInterface{
-        public function chunk ( int $size , bool $preserve ) : array;
+        public function chunk ( int $size , bool $preserve = false ) : array;
         public function count ( ) : int;
         public function extend ( string $class ) : bool;
         public function from ( Closure $run , Closure $construct , array $args) : Threaded;
