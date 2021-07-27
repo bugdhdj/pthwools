@@ -23,7 +23,7 @@
   },
   "autoload": {
     "files": [
-      "src/Constant.php"
+      "src/Constant/Constant.php"
     ],
     "psr-4": {
       "": "src"

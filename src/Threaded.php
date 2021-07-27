@@ -2,57 +2,114 @@
 if (!extension_loaded("pthreads")) {
     /** TO BE IMPLEMENTED:
      * Collectable - DONE
-	 * IteratorAggregate
-	 * Countable
-     * ArrayAccess
+	 * IteratorAggregate - DONE
+	 * Countable - DONE
+     * ArrayAccess - DONE
      * ThreadedInterface
 	 */
 	class Threaded implements Collectable, IteratorAggregate, Countable, ArrayAccess, ThreadedInterface {
 
-	    protected bool $_GARBAGE;
+        const NOTHING = (0);
+        const STARTED = (1<<0);
+        const RUNNING = (1<<1);
+        const JOINED  = (1<<2);
+        const ERROR   = (1<<3);
+
+        protected array $data;
+        protected int $state;
+
+        public function __set($offset, $value){
+            if ($offset === null) {
+                $offset = count($this->data);
+            }
+
+            if (!$this instanceof Volatile) {
+                if (isset($this->data[$offset]) &&
+                    $this->data[$offset] instanceof Threaded) {
+                    throw new \RuntimeException();
+                }
+            }
+
+            if (is_array($value)) {
+                $safety =
+                    new Volatile();
+                $safety->merge(
+                    $this->convertToVolatile($value));
+                $value = $safety;
+            }
+
+            return $this->data[$offset] = $value;
+        }
+
+        public function __get($offset){
+            return $this->data[$offset];
+        }
+
+        public function __isset($offset) {
+            return isset($this->data[$offset]);
+        }
+
+        public function __unset($offset)		 {
+            if (!$this instanceof Volatile) {
+                if (isset($this->data[$offset]) && $this->data[$offset] instanceof Threaded) {
+                    throw new \RuntimeException();
+                }
+            }
+            unset($this->data[$offset]);
+        }
+
+        private function convertToVolatile($value) {
+            if (is_array($value)) {
+                foreach ($value as $k => $v) {
+                    if (is_array($v)) {
+                        $value[$k] =
+                            new Volatile();
+                        $value[$k]->merge(
+                            $this->convertToVolatile($v));
+                    }
+                }
+            }
+            return $value;
+        }
+
 
         public function isGarbage():bool
         {
-            // TODO: Implement isGarbage() method.
+            return true;
         }
 
-        public function setGarbage()
+        public function getIterator(): ArrayIterator
         {
-            // TODO: Implement setGarbage() method.
-        }
-
-        public function getIterator()
-        {
-            // TODO: Implement getIterator() method.
+            return new ArrayIterator($this->data);
         }
 
         public function offsetExists($offset)
         {
-            // TODO: Implement offsetExists() method.
+            return $this->__isset($offset);
         }
 
         public function offsetGet($offset)
         {
-            // TODO: Implement offsetGet() method.
+            return $this->__get($offset);
         }
 
         public function offsetSet($offset, $value)
         {
-            // TODO: Implement offsetSet() method.
+            $this->__set($offset, $value);
         }
 
         public function offsetUnset($offset)
         {
-            // TODO: Implement offsetUnset() method.
+            $this->__unset($offset);
         }
 
-        public function chunk ( int $size , bool $preserve ) : array{
+        public function chunk ( int $size , bool $preserve = false ) : array{
             // TODO: Implement chunk() method.
         }
 
         public function count() : int
         {
-            // TODO: Implement count() method.
+            return count($this->data);
         }
 
         public function extend(string $class): bool
@@ -90,9 +147,13 @@ if (!extension_loaded("pthreads")) {
             // TODO: Implement lock() method.
         }
 
-        public function merge(mixed $from, bool $overwrite): bool
+        public function merge(mixed $from, bool $overwrite = true): bool
         {
-            // TODO: Implement merge() method.
+            foreach ($from as $k => $v) {
+                if($overwrite || !isset($this->data[$k])){
+                    $this->data[$k] = $v;
+                }
+            }
         }
 
         public function notify(): bool

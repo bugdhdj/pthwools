@@ -10,7 +10,7 @@ if (!extension_loaded("pthreads")) {
         public function isTerminated ( ) : bool;
         public function isWaiting ( ) : bool;
         public function lock ( ) : bool;
-        public function merge ( mixed $from , bool $overwrite) : bool;
+        public function merge ( mixed $from , bool $overwrite = true) : bool;
         public function notify ( ) : bool;
         public function notifyOne ( ) : bool;
         public function pop ( ) : bool;

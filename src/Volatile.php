@@ -1,7 +1,7 @@
 <?php
 if (!extension_loaded("pthreads")) {
 
-	class Volatile extends Threaded {
+	class Volatile extends Threaded implements Collectable, IteratorAggregate {
 		public function __set($offset, $value) { 
 			if ($offset === null) {
 				$offset = count($this->data);
