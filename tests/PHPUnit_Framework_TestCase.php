@@ -9,3 +9,7 @@
  */
 
 declare(strict_types=1);
+
+class PHPUnit_Framework_TestCase extends \PHPUnit\Framework\TestCase{
+
+}

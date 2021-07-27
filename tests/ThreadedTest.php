@@ -31,7 +31,9 @@ class ThreadedTest extends PHPUnit_Framework_TestCase {
 	public function testThreadedCountable() {
 		$threaded = new Threaded();
 		$threaded[] = "something";
-		$this->assertEquals(1, count($threaded));
+		if(is_countable($threaded)){
+			$this->assertEquals(1, count($threaded));
+		}
 	}
 
 	public function testThreadedShift() {
