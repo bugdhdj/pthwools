@@ -1,6 +1,7 @@
 # pthwools
 
-[![Build Status](https://travis-ci.org/krakjoe/pthreads-polyfill.svg)](https://travis-ci.org/krakjoe/pthreads-polyfill)
+[![GitHub license](https://img.shields.io/github/license/bugdhdj/pthwools)](https://github.com/bugdhdj/pthwools/blob/master/LICENSE)
+<a href="https://packagist.org/packages/bugdhdj/pthwools"><img src="https://img.shields.io/packagist/v/bugdhdj/pthwools" alt="Composer packagist"></a>
 
 *pthwools* aims to satisfy the API requirements of *pthreads* with *swoole*, such that code written to depend on *pthreads* will work when *pthreads* is not, or can not be loaded.
 
