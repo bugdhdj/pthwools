@@ -1,148 +1,130 @@
 <?php
 if (!extension_loaded("pthreads")) {
 	
-	class Threaded implements ArrayAccess, Countable, IteratorAggregate, Collectable {
-		const NOTHING = (0);
-		const STARTED = (1<<0);	
-		const RUNNING = (1<<1);
-		const JOINED  = (1<<2);
-		const ERROR   = (1<<3);
+	class Threaded implements Collectable, IteratorAggregate, Countable, ArrayAccess, ThreadedInterface {
 
-		public function offsetSet($offset, $value) { 
-			$this->__set($offset, $value);
-		}
+        public function isGarbage()
+        {
+            // TODO: Implement isGarbage() method.
+        }
 
-		public function offsetGet($offset) { 
-			return $this->__get($offset);
-		}
+        public function setGarbage()
+        {
+            // TODO: Implement setGarbage() method.
+        }
 
-		public function offsetUnset($offset) {
-			$this->__unset($offset);
-		}
+        public function getIterator()
+        {
+            // TODO: Implement getIterator() method.
+        }
 
-		public function offsetExists($offset) { 
-			return $this->__isset($offset);
-		}
+        public function offsetExists($offset)
+        {
+            // TODO: Implement offsetExists() method.
+        }
 
-		public function count() {
-			return count($this->data); 
-		}
+        public function offsetGet($offset)
+        {
+            // TODO: Implement offsetGet() method.
+        }
 
-		public function getIterator() {
-			return new ArrayIterator($this->data);
-		}
+        public function offsetSet($offset, $value)
+        {
+            // TODO: Implement offsetSet() method.
+        }
 
-		public function __set($offset, $value) { 
-			if ($offset === null) {
-				$offset = count($this->data);
-			}
+        public function offsetUnset($offset)
+        {
+            // TODO: Implement offsetUnset() method.
+        }
 
-			if (!$this instanceof Volatile) {
-				if (isset($this->data[$offset]) && 
-					$this->data[$offset] instanceof Threaded) {
-					throw new \RuntimeException();
-				}
-			}
+        public function chunk ( int $size , bool $preserve ) : array{
+            // TODO: Implement chunk() method.
+        }
 
-			if (is_array($value)) {
-				$safety = 
-					new Volatile();
-				$safety->merge(
-					$this->convertToVolatile($value));
-				$value = $safety;
-			}
-			
-			return $this->data[$offset] = $value;
-		}
+        public function count() : int
+        {
+            // TODO: Implement count() method.
+        }
 
-		public function __get($offset) { 
-			return $this->data[$offset];
-		}
+        public function extend(string $class): bool
+        {
+            // TODO: Implement extend() method.
+        }
 
-		public function __isset($offset) { 
-			return isset($this->data[$offset]); 
-		}
+        public function from(Closure $run, Closure $construct, array $args): Threaded
+        {
+            // TODO: Implement from() method.
+        }
 
-		public function __unset($offset)		 { 
-			if (!$this instanceof Volatile) {
-				if (isset($this->data[$offset]) && $this->data[$offset] instanceof Threaded) {
-					throw new \RuntimeException();
-				}
-			}
-			unset($this->data[$offset]);  
-		}
+        public function getTerminationInfo(): array
+        {
+            // TODO: Implement getTerminationInfo() method.
+        }
 
-		public function shift() { 
-			return array_shift($this->data); 
-		}
+        public function isRunning(): bool
+        {
+            // TODO: Implement isRunning() method.
+        }
 
-		public function chunk($size) {
-			$chunk = [];
-			while (count($chunk) < $size) {
-				$chunk[] = $this->shift();
-			}
-			return $chunk;
-		}
+        public function isTerminated(): bool
+        {
+            // TODO: Implement isTerminated() method.
+        }
 
-		public function pop() { 
-			return array_pop($this->data); 
-		}
+        public function isWaiting(): bool
+        {
+            // TODO: Implement isWaiting() method.
+        }
 
-		public function merge($merge) {
-			foreach ($merge as $k => $v) {
-				$this->data[$k] = $v;
-			}
-		}
-		
-		public function wait($timeout = 0) {
-			return true;
-		}
+        public function lock(): bool
+        {
+            // TODO: Implement lock() method.
+        }
 
-		public function notify() {
-			return true;
-		}
+        public function merge(mixed $from, bool $overwrite): bool
+        {
+            // TODO: Implement merge() method.
+        }
 
-		public function synchronized(Closure $closure, ... $args) {
-			return $closure(...$args);
-		}
+        public function notify(): bool
+        {
+            // TODO: Implement notify() method.
+        }
 
-		public function isRunning() { 
-			return $this->state & THREAD::RUNNING; 
-		}
+        public function notifyOne(): bool
+        {
+            // TODO: Implement notifyOne() method.
+        }
 
-		public function isTerminated() { 
-			return $this->state & THREAD::ERROR; 
-		}
+        public function pop(): bool
+        {
+            // TODO: Implement pop() method.
+        }
 
-		public static function extend($class) { return true; }
+        public function run(): void
+        {
+            // TODO: Implement run() method.
+        }
 
-		public function addRef() {}
-		public function delRef() {}
-		public function getRefCount() {}
+        public function shift(): mixed
+        {
+            // TODO: Implement shift() method.
+        }
 
-		public function lock() { return true; }
-		public function unlock() { return true; }
-		public function isWaiting() { return false; }
+        public function synchronized(Closure $block, ...$args): mixed
+        {
+            // TODO: Implement synchronized() method.
+        }
 
-		public function run() {}
+        public function unlock(): bool
+        {
+            // TODO: Implement unlock() method.
+        }
 
-		public function isGarbage() { return true; }
-
-		private function convertToVolatile($value) {
-			if (is_array($value)) {
-				foreach ($value as $k => $v) {
-					if (is_array($v)) {
-						$value[$k] = 
-							new Volatile();
-						$value[$k]->merge(
-							$this->convertToVolatile($v));
-					}
-				}
-			}
-			return $value;
-		}
-
-		protected $data;
-		protected $state;
-	}
+        public function wait(int $timeout): bool
+        {
+            // TODO: Implement wait() method.
+        }
+    }
 }
