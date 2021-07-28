@@ -23,25 +23,25 @@ namespace {
                     $thread->setCid(Coroutine::getCid());
                     $thread->setPcid(Coroutine::getPcid());
 
+                    Coroutine::defer(function () use ($thread) {
+                        $thread->__setState(THREAD::JOINED);
+                    });
+
                     $thread->__setState(THREAD::STARTED);
 
                     Coroutine::yield();
 
                     $thread->__setState(THREAD::RUNNING);
                     $thread->run();
-                    $thread->__setState(THREAD::JOINED);
                 });
                 unset($thread);
             }
 
             public function __destruct()
             {
-                $thread = $this;
-
-                Coroutine::defer(function () use ($thread){
-                    $thread->__setState(THREAD::NOTHING);
-                });
-                unset($thread);
+                if (Coroutine::exists($this->cid)) {
+                    Coroutine::cancel($this->cid);
+                }
             }
 
             public function setPcid($pcid): bool
