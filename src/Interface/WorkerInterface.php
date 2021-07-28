@@ -10,7 +10,24 @@
 
 declare(strict_types=1);
 
-interface WorkerInterface
-{
+namespace {
 
+    if (!extension_loaded("pthreads")) {
+
+        interface WorkerInterface
+        {
+            public function collect(Closure $collector = null): int;
+
+            public function getStacked(): int;
+
+            public function isShutdown(): bool;
+
+            public function shutdown(): bool;
+
+            public function stack(Threaded $work): int;
+
+            public function unstack(): int;
+
+        }
+    }
 }

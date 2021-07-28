@@ -1,12 +1,20 @@
 <?php
+
 namespace {
+
+    use Swoole\Coroutine;
+
     if (!extension_loaded("pthreads")) {
 
-        class Worker extends Thread
+        class Worker extends Thread implements IteratorAggregate, Countable, ArrayAccess, WorkerInterface
         {
-            public function collect(Closure $collector = null)
+            private $stack = [];
+            private $gc = [];
+
+            public function collect(Closure $collector = null): int
             {
-                foreach ($this->gc as $idx => $collectable) {
+                foreach (
+                    $this->gc as $idx => $collectable) {
                     if ($collector) {
                         if ($collector($collectable)) {
                             unset($this->gc[$idx]);
@@ -21,58 +29,56 @@ namespace {
                 return count($this->gc) + count($this->stack);
             }
 
-            public function collector(Collectable $collectable)
+            public function stack(Threaded $threaded): int
             {
-                return $collectable->isGarbage();
-            }
-
-            public function shutdown()
-            {
-                return $this->join();
-            }
-
-            public function isShutdown()
-            {
-                return $this->isJoined();
-            }
-
-            public function getStacked()
-            {
-                return count($this->stack);
-            }
-
-            public function unstack()
-            {
-                return array_shift($this->stack);
-            }
-
-            public function stack(Threaded $collectable)
-            {
-                $this->stack[] = $collectable;
+                $this->stack[] = $threaded;
                 if ($this->isStarted()) {
-                    $this->runCollectable(count($this->stack) - 1, $collectable);
+                    $this->runCollectable(count($this->stack) - 1, $threaded);
                 }
             }
 
-            public function run():void
+            public function run(): void
             {
                 foreach ($this->stack as $idx => $collectable) {
                     $this->runCollectable($idx, $collectable);
                 }
             }
 
-            private function runCollectable($idx, Collectable $collectable)
+            private function runCollectable($idx, Threaded $threaded)
             {
-                $collectable->worker = $this;
-                $collectable->state |= THREAD::RUNNING;
-                $collectable->run();
-                $collectable->state &= ~THREAD::RUNNING;
-                $this->gc[] = $collectable;
+                $threaded->worker = $this;
+                $threaded->state |= THREAD::RUNNING;
+                $threaded->run();
+                $threaded->state &= ~THREAD::RUNNING;
+                $this->gc[] = $threaded;
                 unset($this->stack[$idx]);
             }
 
-            private $stack = [];
-            private $gc = [];
+            public function collector(Threaded $threaded)
+            {
+                return $threaded->isGarbage();
+            }
+
+            public function shutdown(): bool
+            {
+                return $this->join();
+            }
+
+            public function isShutdown(): bool
+            {
+                return $this->isJoined();
+            }
+
+            public function getStacked(): int
+            {
+                return count($this->stack);
+            }
+
+            public function unstack(): int
+            {
+                return array_shift($this->stack);
+            }
+
         }
     }
 

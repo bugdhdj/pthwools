@@ -35,28 +35,46 @@ $pool->shutdown();*/
 
 // example pthwools
 
-class MyThread extends Thread{
+//class MyThread extends Thread{
+//
+//    public function run(): void
+//    {
+//        \Swoole\Coroutine::sleep(1);
+//        echo "sleep: hello world \n";
+//    }
+//}
+//
+//class MyThread2 extends Thread{
+//
+//    public function run(): void
+//    {
+//        echo "hello world \n";
+//    }
+//}
+//$app = new MyThread();
+//$app2 = new MyThread2();
+//echo "=> Bugdhdj Start \n";
+//echo "Run MyThread \n";
+//$app->start();
+//echo "Run MyThread2 \n";
+//$app2->start();
+//
+//echo "=> Bugdhdj End \n";
 
-    public function run(): void
-    {
-        \Swoole\Coroutine::sleep(1);
-        echo "sleep: hello world \n";
-    }
+$worker = new Worker();
+
+echo "There are currently {$worker->collect()} tasks on the stack to be collected\n";
+
+for ($i = 0; $i < 15; ++$i) {
+    $worker->stack(new class extends Threaded {});
 }
 
-class MyThread2 extends Thread{
+echo "There are {$worker->collect()} tasks remaining on the stack to be collected\n";
 
-    public function run(): void
-    {
-        echo "hello world \n";
-    }
-}
-$app = new MyThread();
-$app2 = new MyThread2();
-echo "=> Bugdhdj Start \n";
-echo "Run MyThread \n";
-$app->start();
-echo "Run MyThread2 \n";
-$app2->start();
+$worker->start();
 
-echo "=> Bugdhdj End \n";
+while ($worker->collect()); // blocks until all tasks have finished executing
+
+echo "There are now {$worker->collect()} tasks on the stack to be collected\n";
+
+$worker->shutdown();
