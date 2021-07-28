@@ -3,47 +3,31 @@
 namespace {
     if (!extension_loaded("pthreads")) {
 
-        class Pool
+        class Pool implements PoolInterface
         {
+            protected int $size;
+            protected $class;
+            protected array $workers;
+            protected $ctor;
+            protected int $last;
 
-            public function __construct($size, $class = \Worker::class, $ctor = [])
+            public function __construct(int $size, string $class = null, array $ctor = null)
             {
                 $this->size = $size;
-                $this->clazz = $class;
+                $this->class = $class;
                 $this->ctor = $ctor;
             }
 
-            public function submit(Threaded $collectable)
-            {
-                if ($this->last > $this->size) {
-                    $this->last = 0;
-                }
-
-                if (!isset($this->workers[$this->last])) {
-                    $this->workers[$this->last] =
-                        new $this->clazz(...$this->ctor);
-                    $this->workers[$this->last]->start();
-                }
-
-                $this->workers[$this->last++]->stack($collectable);
-            }
-
-            public function submitTo($worker, Threaded $collectable)
-            {
-                if (isset($this->workers[$worker])) {
-                    $this->workers[$worker]->stack($collectable);
-                }
-            }
-
-            public function collect(Closure $collector = null)
+            public function collect(callable $collector = null): int
             {
                 $total = 0;
-                foreach ($this->workers as $worker)
+                foreach ($this->workers as $worker) {
                     $total += $worker->collect($collector);
+                }
                 return $total;
             }
 
-            public function resize($size)
+            public function resize(int $size): void
             {
                 if ($size < $this->size) {
                     while ($this->size > $size) {
@@ -55,16 +39,31 @@ namespace {
                 }
             }
 
-            public function shutdown()
+            public function shutdown(): void
             {
-                $this->workers = null;
+                unset($this->workers);
             }
 
-            protected $workers;
-            protected $size;
-            protected $last;
-            protected $clazz;
-            protected $ctor;
+            public function submit(Threaded $threaded): int
+            {
+                if ($this->last > $this->size) {
+                    $this->last = 0;
+                }
+
+                if (!isset($this->workers[$this->last])) {
+                    $this->workers[$this->last] = new $this->class(...$this->ctor);
+                    $this->workers[$this->last]->start();
+                }
+
+                return count($this->workers[$this->last++]->stack($threaded));
+            }
+
+            public function submitTo(int $worker, Threaded $threaded): int
+            {
+                if (isset($this->workers[$worker])) {
+                    return count($this->workers[$worker]->stack($threaded));
+                }
+            }
         }
     }
 }
