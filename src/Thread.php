@@ -15,10 +15,11 @@ namespace {
             protected int $cid;
             protected int $pcid;
 
-            public function __construct(){
-                self::$current_thread=$this;
-                $thread=$this;
-                $this->cid=Coroutine::create(function() use ($thread){
+            public function __construct()
+            {
+                self::$current_thread = $this;
+                $thread = $this;
+                $this->cid = Coroutine::create(function () use ($thread) {
                     $thread->setCid(Coroutine::getCid());
                     $thread->setPcid(Coroutine::getPcid());
 
@@ -30,16 +31,29 @@ namespace {
                     $thread->run();
                     $thread->__setState(THREAD::JOINED);
                 });
+                unset($thread);
             }
 
-            public function setPcid($pcid):bool{
-                $this->pcid=$pcid;
+            public function __destruct()
+            {
+                $thread = $this;
+
+                Coroutine::defer(function () use ($thread){
+                    $thread->__setState(THREAD::NOTHING);
+                });
+                unset($thread);
+            }
+
+            public function setPcid($pcid): bool
+            {
+                $this->pcid = $pcid;
                 return true;
             }
 
-            public function setCid($cid):bool{
-                $this->cid=$cid;
-                self::$current_cid=$cid;
+            public function setCid($cid): bool
+            {
+                $this->cid = $cid;
+                self::$current_cid = $cid;
                 return true;
             }
 
@@ -75,8 +89,8 @@ namespace {
 
             public function join(): bool
             {
-                while(Coroutine::exists($this->cid)){
-                    usleep(1000*100);
+                while (Coroutine::exists($this->cid)) {
+                    usleep(1000 * 100);
                 }
                 return true;
             }
