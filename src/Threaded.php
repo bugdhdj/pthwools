@@ -21,6 +21,12 @@ namespace {
             protected array $data;
             protected int $state;
 
+            public function __setState($state): bool
+            {
+                $this->state += $state;
+                return true;
+            }
+
             public function __set($offset, $value)
             {
                 if ($offset === null) {

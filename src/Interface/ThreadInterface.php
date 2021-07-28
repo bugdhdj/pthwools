@@ -22,15 +22,11 @@ if (!extension_loaded("pthreads")) {
 
         public function getThreadId(): int;
 
-        public static function globally(): mixed;
-
         public function isJoined(): bool;
 
         public function isStarted(): bool;
 
         public function join(): bool;
-
-        public function kill(): void;
 
         public function start(int $options = PTHREADS_INHERIT_ALL): bool;
     }
