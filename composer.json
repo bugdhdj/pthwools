@@ -2,7 +2,12 @@
   "name": "bugdhdj/pthwools",
   "type": "library",
   "description": "A polyfill for pthreads",
-  "keywords": ["pthreads", "polyfill","swoole","pthwools"],
+  "keywords": [
+    "pthreads",
+    "polyfill",
+    "swoole",
+    "pthwools"
+  ],
   "homepage": "http://pthreads.org/",
   "license": "GPL-3.0-or-later",
   "authors": [
@@ -13,7 +18,8 @@
     {
       "name": "William Wang",
       "email": "not@dhdj.org"
-    },{
+    },
+    {
       "name": "LixWorth",
       "email": "lixworth@outlook.com"
     }
@@ -26,7 +32,10 @@
       "src/Constant/Constant.php"
     ],
     "psr-4": {
-      "": "src"
+      "": [
+        "src",
+        "src/Interface"
+      ]
     }
   },
   "autoload-dev": {
