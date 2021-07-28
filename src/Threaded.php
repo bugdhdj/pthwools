@@ -4,6 +4,7 @@ namespace {
 
     if (!extension_loaded("pthreads")) {
         require_once('Interface/ThreadedInterface.php');
+
         /** TO BE IMPLEMENTED:
          * Collectable - DONE
          * IteratorAggregate - DONE
@@ -25,7 +26,8 @@ namespace {
 
             public function __construct()
             {
-                $this->state=THREAD::NOTHING;
+                $this->state = THREAD::NOTHING;
+                $this->data = [];
             }
 
             public function __setState($state): bool
@@ -197,8 +199,9 @@ namespace {
                 return $block(...$args);
             }
 
-            public function wait(int $timeout): bool
+            public function wait(int $timeout = 1): bool
             {
+                usleep($timeout);
                 return true;
             }
         }

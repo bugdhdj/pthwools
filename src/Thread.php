@@ -37,13 +37,14 @@ namespace {
                     $thread->__setState(THREAD::RUNNING);
                     $thread->run();
                 });
+                echo $this->cid;
             }
 
             public function __destruct()
             {
-                //if (Coroutine::exists($this->cid)) {
-                //    Coroutine::cancel($this->cid);
-                //}
+                if (Coroutine::exists($this->cid)) {
+                    Coroutine::cancel($this->cid);
+                }
             }
 
             public function setPcid($pcid): bool
