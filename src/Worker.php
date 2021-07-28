@@ -54,7 +54,7 @@ namespace {
                 }
             }
 
-            public function run()
+            public function run():void
             {
                 foreach ($this->stack as $idx => $collectable) {
                     $this->runCollectable($idx, $collectable);
