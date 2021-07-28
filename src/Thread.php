@@ -5,7 +5,7 @@ namespace {
     use Swoole\Coroutine;
 
     if (!extension_loaded("pthreads")) {
-
+        require_once('Interface/ThreadInterface.php');
         class Thread extends Threaded implements Countable, IteratorAggregate, ArrayAccess, ThreadInterface
         {
 
@@ -17,6 +17,7 @@ namespace {
 
             public function __construct()
             {
+                parent::__construct();
                 self::$current_thread = $this;
                 $thread = &$this;
                 $this->cid = Coroutine::create(function () use ($thread) {
@@ -38,9 +39,9 @@ namespace {
 
             public function __destruct()
             {
-                if (Coroutine::exists($this->cid)) {
-                    Coroutine::cancel($this->cid);
-                }
+                //if (Coroutine::exists($this->cid)) {
+                //    Coroutine::cancel($this->cid);
+                //}
             }
 
             public function setPcid($pcid): bool
@@ -97,6 +98,7 @@ namespace {
             public function start(int $options = PTHREADS_INHERIT_ALL): bool
             {
                 Coroutine::resume($this->cid);
+                return true;
             }
         }
     }

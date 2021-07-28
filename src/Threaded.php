@@ -1,7 +1,10 @@
 <?php
 
 namespace {
+
     if (!extension_loaded("pthreads")) {
+        require_once('Interface/Collectable.php');
+        require_once('Interface/ThreadedInterface.php');
         /** TO BE IMPLEMENTED:
          * Collectable - DONE
          * IteratorAggregate - DONE
@@ -20,6 +23,11 @@ namespace {
 
             protected array $data;
             protected int $state;
+
+            public function __construct()
+            {
+                $this->state=THREAD::NOTHING;
+            }
 
             public function __setState($state): bool
             {
