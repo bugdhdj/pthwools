@@ -8,7 +8,7 @@ namespace {
 
     if (!extension_loaded("pthreads")) {
 
-        Runtime::enableCoroutine(SWOOLE_HOOK_ALL ^ SWOOLE_HOOK_PROC ^ SWOOLE_HOOK_BLOCKING_FUNCTION );
+        Runtime::enableCoroutine(SWOOLE_HOOK_ALL ^ SWOOLE_HOOK_PROC ^ SWOOLE_HOOK_BLOCKING_FUNCTION ^ SWOOLE_HOOK_NATIVE_CURL );
 
         class Thread extends Threaded implements Countable, IteratorAggregate, ArrayAccess, ThreadInterface
         {
@@ -21,7 +21,6 @@ namespace {
 
             public function __construct()
             {
-                parent::__construct();
                 self::$current_thread = $this;
                 $thread = &$this;
                 $this->cid = Coroutine::create(function () use ($thread) {
@@ -84,12 +83,12 @@ namespace {
 
             public function isJoined(): bool
             {
-                return $this->state & THREAD::JOINED;
+                return $this->istate & THREAD::JOINED;
             }
 
             public function isStarted(): bool
             {
-                return $this->state & THREAD::STARTED;
+                return $this->istate & THREAD::STARTED;
             }
 
             public function join(): bool

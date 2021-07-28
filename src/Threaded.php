@@ -19,30 +19,28 @@ namespace {
             const JOINED = (1 << 2);
             const ERROR = (1 << 3);
 
-            protected array $data;
-            protected int $state;
-
-            public function __construct()
-            {
-                $this->state=THREAD::NOTHING;
-                $this->data=[];
-            }
+            protected array $idata = [];
+            protected int $istate = THREAD::NOTHING;
 
             public function __setState($state): bool
             {
-                $this->state += $state;
+                $this->istate += $state;
                 return true;
+            }
+            public function getState(): int
+            {
+                return $this->istate;
             }
 
             public function __set($offset, $value)
             {
                 if ($offset === null) {
-                    $offset = count($this->data);
+                    $offset = count($this->idata);
                 }
 
                 if (!$this instanceof Volatile) {
-                    if (isset($this->data[$offset]) &&
-                        $this->data[$offset] instanceof Threaded) {
+                    if (isset($this->idata[$offset]) &&
+                        $this->idata[$offset] instanceof Threaded) {
                         throw new \RuntimeException();
                     }
                 }
@@ -55,27 +53,28 @@ namespace {
                     $value = $safety;
                 }
 
-                return $this->data[$offset] = $value;
+                return $this->idata[$offset] = $value;
             }
 
             public function __get($offset)
             {
-                return $this->data[$offset];
+                echo $offset;
+                return $this->idata[$offset];
             }
 
             public function __isset($offset)
             {
-                return isset($this->data[$offset]);
+                return isset($this->idata[$offset]);
             }
 
             public function __unset($offset)
             {
                 if (!$this instanceof Volatile) {
-                    if (isset($this->data[$offset]) && $this->data[$offset] instanceof Threaded) {
+                    if (isset($this->idata[$offset]) && $this->idata[$offset] instanceof Threaded) {
                         throw new \RuntimeException();
                     }
                 }
-                unset($this->data[$offset]);
+                unset($this->idata[$offset]);
             }
 
             private function convertToVolatile($value)
@@ -95,7 +94,7 @@ namespace {
 
             public function getIterator(): ArrayIterator
             {
-                return new ArrayIterator($this->data);
+                return new ArrayIterator($this->idata);
             }
 
             public function offsetExists($offset)
@@ -139,7 +138,7 @@ namespace {
 
             public function count(): int
             {
-                return count($this->data);
+                return count($this->idata);
             }
 
             // Cannot be implemented with native php code
@@ -150,19 +149,19 @@ namespace {
 
             public function isRunning(): bool
             {
-                return $this->state & THREAD::RUNNING;
+                return $this->istate & THREAD::RUNNING;
             }
 
             public function isTerminated(): bool
             {
-                return $this->state & THREAD::ERROR;
+                return $this->istate & THREAD::ERROR;
             }
 
             public function merge(mixed $from, bool $overwrite = true): bool
             {
                 foreach ($from as $k => $v) {
-                    if ($overwrite || !isset($this->data[$k])) {
-                        $this->data[$k] = $v;
+                    if ($overwrite || !isset($this->idata[$k])) {
+                        $this->idata[$k] = $v;
                     }
                 }
             }
@@ -179,7 +178,7 @@ namespace {
 
             public function pop(): bool
             {
-                return array_pop($this->data);
+                return array_pop($this->idata);
             }
 
             public function run(): void
@@ -189,7 +188,7 @@ namespace {
 
             public function shift(): mixed
             {
-                return array_shift($this->data);
+                return array_shift($this->idata);
             }
 
             public function synchronized(Closure $block, ...$args): mixed

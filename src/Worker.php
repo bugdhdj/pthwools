@@ -11,6 +11,10 @@ namespace {
             private $stack = [];
             private $gc = [];
 
+            public function __construct(){
+                parent::__construct();
+            }
+
             public function collect(Closure $collector = null): int
             {
                 foreach (
@@ -35,6 +39,7 @@ namespace {
                 if ($this->isStarted()) {
                     $this->runCollectable(count($this->stack) - 1, $threaded);
                 }
+                return count($this->stack);
             }
 
             public function run(): void
@@ -47,9 +52,9 @@ namespace {
             private function runCollectable($idx, Threaded $threaded)
             {
                 $threaded->worker = $this;
-                $threaded->state |= THREAD::RUNNING;
+                $threaded->__setState(THREAD::RUNNING);
                 $threaded->run();
-                $threaded->state &= ~THREAD::RUNNING;
+                $threaded->__setState(-THREAD::RUNNING);
                 $this->gc[] = $threaded;
                 unset($this->stack[$idx]);
             }
@@ -76,7 +81,8 @@ namespace {
 
             public function unstack(): int
             {
-                return array_shift($this->stack);
+                array_shift($this->stack);
+                return count($this->stack);
             }
 
         }
