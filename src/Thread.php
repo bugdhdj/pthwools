@@ -6,7 +6,6 @@ namespace {
     use Swoole\Event;
 
     if (!extension_loaded("pthreads")) {
-        require_once('Interface/ThreadInterface.php');
 
         class Thread extends Threaded implements Countable, IteratorAggregate, ArrayAccess, ThreadInterface
         {

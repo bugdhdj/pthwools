@@ -3,7 +3,6 @@
 namespace {
 
     if (!extension_loaded("pthreads")) {
-        require_once('Interface/ThreadedInterface.php');
 
         /** TO BE IMPLEMENTED:
          * Collectable - DONE
