@@ -1,9 +1,6 @@
 <?php
 
 namespace {
-
-    use Swoole\Coroutine;
-
     if (!extension_loaded("pthreads")) {
         /** TO BE IMPLEMENTED:
          * Collectable - DONE

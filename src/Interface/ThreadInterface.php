@@ -14,8 +14,6 @@ if (!extension_loaded("pthreads")) {
 
     interface ThreadInterface
     {
-        public function detach(): void;
-
         public function getCreatorId(): int;
 
         public static function getCurrentThread(): Thread;
