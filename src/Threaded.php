@@ -3,7 +3,6 @@
 namespace {
 
     if (!extension_loaded("pthreads")) {
-        require_once('Interface/Collectable.php');
         require_once('Interface/ThreadedInterface.php');
         /** TO BE IMPLEMENTED:
          * Collectable - DONE
@@ -12,7 +11,7 @@ namespace {
          * ArrayAccess - DONE
          * ThreadedInterface
          */
-        class Threaded implements Collectable, IteratorAggregate, Countable, ArrayAccess, ThreadedInterface
+        class Threaded implements IteratorAggregate, Countable, ArrayAccess, ThreadedInterface
         {
 
             const NOTHING = (0);
@@ -92,12 +91,6 @@ namespace {
                     }
                 }
                 return $value;
-            }
-
-
-            public function isGarbage(): bool
-            {
-                return true;
             }
 
             public function getIterator(): ArrayIterator
