@@ -18,7 +18,7 @@ namespace {
             public function __construct()
             {
                 self::$current_thread = $this;
-                $thread = $this;
+                $thread = &$this;
                 $this->cid = Coroutine::create(function () use ($thread) {
                     $thread->setCid(Coroutine::getCid());
                     $thread->setPcid(Coroutine::getPcid());
@@ -34,7 +34,6 @@ namespace {
                     $thread->__setState(THREAD::RUNNING);
                     $thread->run();
                 });
-                unset($thread);
             }
 
             public function __destruct()
