@@ -3,9 +3,11 @@
 namespace {
 
     use Swoole\Coroutine;
+    use Swoole\Event;
 
     if (!extension_loaded("pthreads")) {
         require_once('Interface/ThreadInterface.php');
+
         class Thread extends Threaded implements Countable, IteratorAggregate, ArrayAccess, ThreadInterface
         {
 
@@ -101,6 +103,10 @@ namespace {
                 return true;
             }
         }
+
+        register_shutdown_function(function () {
+            Event::wait();
+        });
     }
 
 }

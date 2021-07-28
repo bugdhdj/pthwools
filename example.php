@@ -1,5 +1,7 @@
 <?php
 
+use Swoole\Event;
+
 require_once("vendor/autoload.php");
 
 /*
