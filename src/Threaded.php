@@ -3,7 +3,6 @@
 namespace {
 
     if (!extension_loaded("pthreads")) {
-
         /** TO BE IMPLEMENTED:
          * Collectable - DONE
          * IteratorAggregate - DONE
@@ -25,8 +24,8 @@ namespace {
 
             public function __construct()
             {
-                $this->state = THREAD::NOTHING;
-                $this->data = [];
+                $this->state=THREAD::NOTHING;
+                $this->data=[];
             }
 
             public function __setState($state): bool

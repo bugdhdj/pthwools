@@ -4,8 +4,11 @@ namespace {
 
     use Swoole\Coroutine;
     use Swoole\Event;
+    use Swoole\Runtime;
 
     if (!extension_loaded("pthreads")) {
+
+        Runtime::enableCoroutine(SWOOLE_HOOK_ALL ^ SWOOLE_HOOK_PROC ^ SWOOLE_HOOK_BLOCKING_FUNCTION );
 
         class Thread extends Threaded implements Countable, IteratorAggregate, ArrayAccess, ThreadInterface
         {
@@ -92,6 +95,7 @@ namespace {
             public function join(): bool
             {
                 while (Coroutine::exists($this->cid)) {
+                    Coroutine::cancel($this->cid);
                     usleep(1000 * 100);
                 }
                 return true;
