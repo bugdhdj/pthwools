@@ -8,8 +8,12 @@
     "swoole",
     "pthwools"
   ],
-  "homepage": "http://pthreads.org/",
+  "homepage": "https://github.com/bugdhdj",
   "license": "GPL-3.0-or-later",
+  "support": {
+    "issues": "https://github.com/bugdhdj/pthwoolsissues",
+    "source": "https://github.com/bugdhdj/pthwools"
+  },
   "authors": [
     {
       "name": "Joe Watkins",
@@ -34,14 +38,14 @@
     ],
     "psr-4": {
       "": [
-        "src",
-        "src/Interface"
+        "src/",
+        "src/Interface/"
       ]
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "": "tests"
+      "": "tests/"
     }
   },
   "require-dev": {

@@ -9,6 +9,8 @@
 
 *pthwools* will ONLY fill for v3, behaviour is consistent with v3, which is the version new projects should target.
 
+**It is used in [bugdhdj/PocketMine-MP-Swoole](https://github.com/bugdhdj/PocketMine-MP-Swoole) Project.**
+
 Testing
 ------
 
